@@ -19,7 +19,8 @@ export default class ToDo extends React.Component {
         createdAt: PropTypes.number.isRequired,
         deleteToDo: PropTypes.func.isRequired,
         completeToDo: PropTypes.func.isRequired,
-        uncompleteToDo: PropTypes.func.isRequired
+        uncompleteToDo: PropTypes.func.isRequired,
+        updateToDo: PropTypes.func.isRequired
     }
 
     
@@ -45,7 +46,7 @@ export default class ToDo extends React.Component {
                 styles.completedText : styles.uncompletedText]}>{text}</Text>)}
                     
             </View>
-            {isEditing ? (<View style={styles.columns}>
+            {isEditing ? (<View style={styles.columns2}>
                 <View style={styles.actions}>
                     <TouchableOpacity onPressOut={this._endEditing}>
                         <View style={styles.actionContainer}>
@@ -53,7 +54,7 @@ export default class ToDo extends React.Component {
                         </View>
                     </TouchableOpacity>
                 </View>
-            </View>) : (<View style={styles.columns}>
+            </View>) : (<View style={styles.columns2}>
                 <View style={styles.actions}>
                 <TouchableOpacity onPressOut={this._startEditing}>
                     <View style={styles.actionContainer}>
@@ -83,6 +84,9 @@ export default class ToDo extends React.Component {
     }
 
     _endEditing = () => {
+        const { toDoValue } = this.state;
+        const { id, updateToDo } = this.props;
+        updateToDo(id, toDoValue);
         this.setState({
             isEditing : false
         })
@@ -120,7 +124,8 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         fontWeight: "400",
-        marginVertical: 20
+        marginVertical: 20,
+        width: "70%"
     },
     completedCircle: {
         borderColor: "#bbb"
@@ -137,7 +142,11 @@ const styles = StyleSheet.create({
     },
     columns: {
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
+        width: "80%"
+    },
+    columns2: {
+        width: "20%"
     },
     actions: {
         flexDirection: "row"
