@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        fontWeight: "400",
+        fontWeight: "600",
         marginVertical: 20,
         width: "70%"
     },
