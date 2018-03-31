@@ -17,14 +17,16 @@ export default class ToDo extends React.Component {
         text : PropTypes.string.isRequired,
         isCompleted: PropTypes.bool.isRequired,
         createdAt: PropTypes.number.isRequired,
-        deleteToDo: PropTypes.func.isRequired
+        deleteToDo: PropTypes.func.isRequired,
+        completeToDo: PropTypes.func.isRequired,
+        uncompleteToDo: PropTypes.func.isRequired
     }
 
     
 
     render(){
-        const { isCompleted, isEditing, toDoValue } = this.state;
-        const { text,id , deleteToDo } = this.props;
+        const { isEditing, toDoValue } = this.state;
+        const { text,id , deleteToDo, isCompleted } = this.props;
         return(
             <View style={styles.container}>
             <View style={styles.columns}>
@@ -72,11 +74,12 @@ export default class ToDo extends React.Component {
     }
 
     _toggleComplete = () => {
-        this.setState(prevState => {
-            return{
-                isCompleted : !prevState.isCompleted
-            }
-        })
+        const {isCompleted, id, completeToDo, uncompleteToDo} = this.props;
+        if(isCompleted){
+            uncompleteToDo(id);
+        }else {
+            completeToDo(id);
+        }   //이제 isCompleted 를 state 에서 하는게 아니라 props의 isCompleted를 살피게됨 
     }
 
     _endEditing = () => {

@@ -45,7 +45,9 @@ export default class App extends React.Component {
            />
           <ScrollView style={styles.todo}>
              {Object.values(toDos).map(todo => <ToDo key={todo.id} {...todo} 
-             deleteToDo={this._deleteToDo}/>)}
+             deleteToDo={this._deleteToDo}
+             completeToDo={this._completeToDo}
+             uncompleteToDo={this._uncompleteToDo}/>)}
           </ScrollView>
         </View>
       </View>
@@ -57,7 +59,7 @@ export default class App extends React.Component {
     if(newToDo !== ""){
         this.setState(prevState =>{
             const ID = uuidv1();
-            const newToDoObject = {
+            const newToDoObject = { //Object로 만드는 이유는 삭제,수정 하기 쉽게 하려고. 
               [ID] : {          //variable이라 대괄호를 씌워줬음. 원래같으면 "" 을 썻을거임
                 id : [ID],
                 isCompleted : false,
@@ -92,14 +94,47 @@ export default class App extends React.Component {
         delete toDos[id];
         const newState = {
           ...prevState,
-          ...toDos
-        }
+          ...toDos  //이 부분 이해하기 너무 빡쎄다;;; 아마 이전에 있던 prevState를 다 불러온 담에
+        }       //toDos는 새로워진 부분이므로 toDos 한 번 더 불러오는 건가..
         return {
           ...newState
         }
       })
   }
 
+  _uncompleteToDo = (id) => {
+    this.setState(prevState =>{
+      const newState = {
+        ...prevState,
+        toDos : {
+          ...prevState.toDos,
+          [id] : {
+            ...prevState.toDos[id],
+            isCompleted : false
+          }
+        }
+      }
+      return {
+        ...newState
+      };
+    })
+  }
+
+  _completeToDo = (id)=> {
+    this.setState(prevState =>{
+      const newState = {
+        ...prevState,
+        toDos : {
+          ...prevState.toDos,
+          [id] : {
+            ...prevState.toDos[id],
+            isCompleted : true
+          }
+        }
+      }
+      return {...newState};
+    });
+  }
 
 }
 
