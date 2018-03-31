@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, Platform
-,TouchableOpacity } from 'react-native';
+,TouchableOpacity, TextInput } from 'react-native';
 import { LinearGradient } from 'expo';
 import PropTypes from 'prop-types';
 
@@ -8,18 +8,30 @@ export default class ToDo extends React.Component {
 
     state = {
         isEditing : false,
-        isCompleted: false
+        isCompleted: false,
+        toDoValue: ""
     }
 
     render(){
-        const { isCompleted, isEditing } = this.state;
+        const { isCompleted, isEditing, toDoValue } = this.state;
+        const { text } = this.props;
         return(
             <View style={styles.container}>
             <View style={styles.columns}>
                 <TouchableOpacity onPress={this._toggleComplete}>
-                    <View style={[styles.circle, isCompleted ? styles.completedCircle : styles.uncompletedCircle]}/>
+                    <View style={[styles.circle, isCompleted ? 
+                        styles.completedCircle : styles.uncompletedCircle]}/>
                 </TouchableOpacity>
-                    <Text style={[styles.text, isCompleted ? styles.completedText : styles.uncompletedText]}>Hello i'm ToDo</Text>
+                { isEditing ? (<TextInput 
+                style={[styles.input, styles.text, isCompleted ? 
+                    styles.completedText : styles.uncompletedText ]} 
+                 value={toDoValue} onChangeText={this._controllInput}
+                 autoCorrect={false} multiline={true} onBlur={this._endEditing}
+                />) : 
+                (<Text 
+                    style={[styles.text, isCompleted ? 
+                styles.completedText : styles.uncompletedText]}>{text}</Text>)}
+                    
             </View>
             {isEditing ? (<View style={styles.columns}>
                 <View style={styles.actions}>
@@ -64,8 +76,15 @@ export default class ToDo extends React.Component {
     }
 
     _startEditing = ()=> {
+        const { text } = this.props;
         this.setState({
-            isEditing : true
+            isEditing : true,
+            toDoValue : text
+        })
+    }
+    _controllInput = (text) => {
+        this.setState({
+            toDoValue : text
         })
     }
 
@@ -114,6 +133,9 @@ const styles = StyleSheet.create({
     },
     actionContainer: {
         margin: 10
+    },
+    input: {
+        width: "70%"
     }
 
 })
