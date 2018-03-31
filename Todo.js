@@ -6,15 +6,25 @@ import PropTypes from 'prop-types';
 
 export default class ToDo extends React.Component {
 
-    state = {
-        isEditing : false,
-        isCompleted: false,
-        toDoValue: ""
+    constructor(props) {
+        super(props);
+        this.state = {
+            isEditing : false, toDoValue : props.text
+        }
     }
+
+    static propTypes ={
+        text : PropTypes.string.isRequired,
+        isCompleted: PropTypes.bool.isRequired,
+        createdAt: PropTypes.number.isRequired,
+        deleteToDo: PropTypes.func.isRequired
+    }
+
+    
 
     render(){
         const { isCompleted, isEditing, toDoValue } = this.state;
-        const { text } = this.props;
+        const { text,id , deleteToDo } = this.props;
         return(
             <View style={styles.container}>
             <View style={styles.columns}>
@@ -48,7 +58,7 @@ export default class ToDo extends React.Component {
                         <Text style={styles.action}>✏️</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPressOut={()=> deleteToDo(id)}>
                     <View style={styles.actionContainer}>
                         <Text style={styles.action}>❌</Text>
                     </View>
@@ -76,10 +86,8 @@ export default class ToDo extends React.Component {
     }
 
     _startEditing = ()=> {
-        const { text } = this.props;
         this.setState({
-            isEditing : true,
-            toDoValue : text
+            isEditing : true
         })
     }
     _controllInput = (text) => {
