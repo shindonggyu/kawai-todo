@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar, Platform } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, Platform, AsyncStorage } from 'react-native';
 import { LinearGradient, AppLoading } from 'expo';
 import PropTypes from 'prop-types';
 import { TextInput, ScrollView } from 'react-native-gesture-handler';
@@ -99,6 +99,7 @@ export default class App extends React.Component {
           ...prevState,
           ...toDos  //이 부분 이해하기 너무 빡쎄다;;; 아마 이전에 있던 prevState를 다 불러온 담에
         }       //toDos는 새로워진 부분이므로 toDos 한 번 더 불러오는 건가..
+        this._saveToDos(newState.toDos);
         return {
           ...newState
         }
@@ -117,6 +118,7 @@ export default class App extends React.Component {
           }
         }
       }
+      this._saveToDos(newState.toDos);
       return {
         ...newState
       };
@@ -135,6 +137,7 @@ export default class App extends React.Component {
           }
         }
       }
+      this._saveToDos(newState.toDos);
       return {...newState};
     });
   }
@@ -151,8 +154,14 @@ export default class App extends React.Component {
           }
         }
       }
+
+      this._saveToDos(newState.toDos);
       return {...newState}
     })
+  }
+
+  _saveToDos = (newToDos) => {
+    const saveToDos = AsyncStorage.setItem("toDos", JSON.stringify(newToDos));
   }
 
 }
